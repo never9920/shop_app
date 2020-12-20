@@ -37,3 +37,4 @@ export function formatDate(date, fmt) {
 //确保有两位（时分秒）
 function padLeftZero(str) {
     return ('00' + str).substr(str.length);
+}
