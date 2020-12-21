@@ -1,7 +1,9 @@
 <template>
   <div id="app">
+      <keep-alive exclude="detail">
       <router-view/>
-    <maintabbar/>
+    </keep-alive>
+    <maintabbar v-show="this.$route.meta.isshow"/>
   </div>
 </template>
 
