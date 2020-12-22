@@ -41,6 +41,8 @@ import {getdetail,Goods,Shop,Goodsparam,Comment,getrecommend} from "network/deta
 import {debounce} from 'common/utils'
 import {imglistern,backtopp} from 'common/mixin'
 
+import {mapActions} from 'vuex'
+
 export default {
 name:"detail",
   data () {
@@ -124,6 +126,7 @@ name:"detail",
   computed: {},
 
   methods: {
+    ...mapActions(['addcart']),
     imageload(){
       this.$refs.scroll.refresh();
       this.themetopy = [];
