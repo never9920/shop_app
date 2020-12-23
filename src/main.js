@@ -3,10 +3,13 @@ import App from './App.vue'
 import router from './router'
 import VueLazyLoad from 'vue-lazyload'
 import store from './store'
+import toast from 'components/common/toast'
 
 Vue.config.productionTip = false
 
 Vue.prototype.$bus = new Vue()
+
+Vue.use(toast)
 
 Vue.use(VueLazyLoad, {
     loading: require('./assets/img/common/jiazai.jpg')
