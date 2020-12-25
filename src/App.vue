@@ -1,7 +1,8 @@
 <template>
   <div id="app">
-      <keep-alive exclude="detail">
-      <router-view/>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <keep-alive exclude="detail">
+    <router-view/>
     </keep-alive>
     <maintabbar v-show="this.$route.meta.isshow"/>
     <icon></icon>

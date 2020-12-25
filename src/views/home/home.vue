@@ -133,6 +133,7 @@ mounted(){
       }
       this.$refs.tab1.currentindex = index;
       this.$refs.tab2.currentindex = index;
+      this.$refs.scroll.scrollTo(0,-this.taboffsettop)
     },
 
     getHomeMultidata(){

@@ -2,17 +2,17 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const home = () =>
-    import ('../views/home/home')
+    import ( /*webpackChunkName:"Home_Detail"*/ '../views/home/home')
 const cart = () =>
-    import ('../views/cart/cart')
+    import ( /*webpackChunkName:"cart"*/ '../views/cart/cart')
 const catagory = () =>
-    import ('../views/catagory/catagory')
+    import ( /*webpackChunkName:"catagory"*/ '../views/catagory/catagory')
 const profile = () =>
-    import ('../views/profile/profile')
+    import ( /*webpackChunkName:"Profile_Login"*/ '../views/profile/profile')
 const detail = () =>
-    import ('../views/detail/detail')
+    import ( /*webpackChunkName:"Home_Detail"*/ '../views/detail/detail')
 const login = () =>
-    import ('../views/login/login')
+    import ( /*webpackChunkName:"Profile_Login"*/ '../views/login/login')
 
 Vue.use(VueRouter)
 
