@@ -64,7 +64,7 @@
         <input placeholder="请输入号码" class="put put2" type="tel" maxlength="11" v-model="phone">
             <button :disabled="!rightphone" 
 		            class="makesure"
-                    :class="{phone: rightphone}"
+                    :class="{phone: !rightphone}"
                     @click.prevent="getCode">
                     {{codetime>0 ? `已发送(${codetime}s)` : '获取验证码'}}
             </button>
@@ -210,9 +210,9 @@ name:"login",
 }
 .makesure{
     position: relative;
-    left:150px;
+    left:170px;
     font-size:10px;
-    top:-25px;
+    top:-23px;
     background-color: white;
     color: black;
     border: none;
