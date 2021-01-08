@@ -17,6 +17,7 @@
     </scroll>
     <detailbottombar @addtocart="addtocart"></detailbottombar>
     <backtop @click.native="backtop" v-show="isshow"></backtop>
+    <popup v-show="pop" @popclose="popclose" :paraminfo="paraminfo" :topimg="topimg" :goods="goods"></popup>
     <!--:为后者是父组件信息，前者是子组件的接受，后者传送给前者，一般用于父组件传给子组件；@前者为子组件发出的信息，后者为父组件的方法-->
   </div>
 </template>
@@ -31,6 +32,7 @@ import detailparam from "./childcomps/detailparam"
 import detailcomment from "./childcomps/detailcomment"
 import detailrecommend from "./childcomps/detailrecommend"
 import detailbottombar from "./childcomps/detailbottombar"
+import popup from './childcomps/popup'
 //import backtop from "components/content/backtop/backtop"
 
 import scroll from "components/common/better-scroll/scroll"
@@ -59,6 +61,7 @@ name:"detail",
         currentindex:0,
         mess:'',
         show:false,
+        pop:false
     };
   },
   mixins:[imglistern,backtopp],
@@ -121,6 +124,7 @@ name:"detail",
       detailrecommend,
       detailbottombar,
       scroll,
+      popup
   },
 
   computed: {},
@@ -189,7 +193,11 @@ name:"detail",
         },1500)*/
         //console.log(res)
         this.$toast.show(res,1500)
+        this.pop = true
       })
+    },
+    popclose(){
+      this.pop = false
     }
   },
   mounted(){
