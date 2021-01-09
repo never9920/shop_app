@@ -15,9 +15,9 @@
     <detailcomment :commentinfo="commentinfo" ref="comment"></detailcomment>
     <detailrecommend :recommendlist="recommendlist" ref="recommend"></detailrecommend>
     </scroll>
-    <detailbottombar @addtocart="addtocart"></detailbottombar>
+    <detailbottombar @addtocart="showpop"></detailbottombar>
     <backtop @click.native="backtop" v-show="isshow"></backtop>
-    <popup v-show="pop" @popclose="popclose" :paraminfo="paraminfo" :topimg="topimg" :goods="goods"></popup>
+    <popup v-show="pop" @popclose="popclose" :paraminfo="paraminfo" :topimg="topimg" :goods="goods" @tocart="tocart"></popup>
     <!--:为后者是父组件信息，前者是子组件的接受，后者传送给前者，一般用于父组件传给子组件；@前者为子组件发出的信息，后者为父组件的方法-->
   </div>
 </template>
@@ -170,7 +170,7 @@ name:"detail",
     titleclick(index){
       this.$refs.scroll.scrollTo(0,-this.themetopy[index])
     },
-    addtocart(){
+    tocart(arcv){
       //console.log('---')
       const product = {}
       product.image = this.topimg[0];
@@ -178,12 +178,16 @@ name:"detail",
       product.desc = this.goods.desc;
       product.price = this.goods.realPrice
       product.iid = this.iid;
+      product.num = arcv.num;
+      product.color = arcv.color;
+      product.size = arcv.sizes
       //this.$store.cartist.push(product)
       //this.$store.commit('addcart',product)
       /*this.$store.dispatch('addcart',product).then(res=>{
         console.log(res)
         //成功之后再显示
       })*/
+      //console.log(product)
       this.addcart(product).then(res=>{
         /*this.show = true;
         this.mess = res;
@@ -193,11 +197,16 @@ name:"detail",
         },1500)*/
         //console.log(res)
         this.$toast.show(res,1500)
-        this.pop = true
+        this.pop= false
+        this.$router.push('/cart')
       })
+      //console.log(arcv)
     },
     popclose(){
       this.pop = false
+    },
+    showpop(){
+      this.pop = true
     }
   },
   mounted(){

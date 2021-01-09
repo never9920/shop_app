@@ -33,10 +33,11 @@ export default {
                 return item.iid === payload.iid
             })
             if (product) {
+                product.num = payload.num
                 context.commit(ADD_COUNTER, product)
-                resolve('当前商品数量+1')
+                resolve('添加商品数量')
             } else {
-                payload.count = 1
+                payload.count = payload.num
                     //context.state.cartlist.push(payload)
                 context.commit(ADD_CART, payload)
                 resolve('添加新商品到购物车')

@@ -6,16 +6,31 @@
               <span>￥{{goods.realPrice}}</span>
           </div>
           <div class="word">
-          <div>
+          <div class="one">
           <div class="color">颜色</div>
-          <div v-for="value in color" :key="value">{{value}}</div>
-          </div>
-          <div>
-          <div class="sizes">尺寸</div>
-          <div v-for="value in sizes" :key="value" >{{value}}</div>
+          <div class="colorch">
+          <div v-for="(value,i) in color" :key="i" class="colorlabel" :class="{active:currentindex===i}" @click="choice(i)">{{value}}</div>
           </div>
           </div>
-          <button>提交</button>
+          <div class="one">
+          <div class="color">尺寸</div>
+          <div class="sizech">
+          <div v-for="(value,i) in sizes" :key="i" class="sizelabel" :class="{active:current===i}" @click="change(i)">{{value}}</div>
+          </div>
+          </div>
+          </div>
+          <div class="two">
+              <div class="num">
+                  数量
+              </div>
+              <div class="change">
+                  <button @click="decrease">-</button>
+                  <input onkeyup="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}" onafterpaste="if(this.value.length==1){this.value=this.value.replace(/[^1-9]/g,'')}else{this.value=this.value.replace(/\D/g,'')}"  v-model="num">
+                  <button @click="increase">+</button>
+              </div>
+          </div>
+          <div class="empty">空白</div>
+          <button class="button" @click="submit">提交</button>
       </div>
   </div>
 </template>
@@ -26,7 +41,15 @@ name:"popup",
   data () {
     return {
         color:[],
-        sizes:[]
+        sizes:[],
+        current:-1,
+        currentindex:-1,
+        arcv:{
+            color:'',
+            sizes:'',
+            num:0
+        },
+        num:1
     };
   },
   props:{
@@ -44,22 +67,8 @@ name:"popup",
     }
   },
 
-  watch:{
-      paraminfo(val){
-        //console.log(val.infos)
-        for(let i=0;i<val.infos.length;i++){
-            if(val.infos[i].key === '颜色'){
-                this.color = val.infos[i].value.split(',')
-                //console.log(this.color)
-            }else if(val.infos[i].key === '尺寸'){
-                this.sizes = val.infos[i].value.split(',')
-                //console.log(this.sizes)
-            }else if(val.infos[i].key === '尺码'){
-                this.sizes = val.infos[i].value.split(',')
-                //console.log(this.sizes)
-            }
-        }
-      }
+  beforeUpdate(){
+      this.changetype()
   },
 
   components: {},
@@ -71,6 +80,53 @@ name:"popup",
           //console.log(this.paraminfo)
           this.$emit('popclose')
       },
+      change(i){
+          if(this.current === i){
+              this.current = -1
+          }else{
+           this.current = i   
+          }
+      },
+      choice(i){
+          if(this.currentindex === i){
+              this.currentindex = -1
+          }else{
+           this.currentindex = i   
+          }
+      },
+      submit(arcv){
+          if(this.current===-1||this.currentindex===-1){
+              this.$toast.show('请选择商品')
+          }else{
+              this.arcv.sizes = this.sizes[this.current]
+              this.arcv.color = this.color[this.currentindex]
+              this.arcv.num = this.num
+              //console.log(this.arcv)
+              this.$emit('tocart',this.arcv)
+          }
+      },
+      changetype(){
+          for(let i=0;i<this.paraminfo.infos.length;i++){
+            if(this.paraminfo.infos[i].key === '颜色'){
+                this.color = this.paraminfo.infos[i].value.split(',')
+                //console.log(this.color)
+            }else if(this.paraminfo.infos[i].key === '尺寸'){
+                this.sizes = this.paraminfo.infos[i].value.split(',')
+                //console.log(this.sizes)
+            }else if(this.paraminfo.infos[i].key === '尺码'){
+                this.sizes = this.paraminfo.infos[i].value.split(',')
+                //console.log(this.sizes)
+            }
+        }
+      },
+      decrease(){
+          if(this.num!==1){
+              this.num--
+          }
+      },
+      increase(){
+          this.num++
+      }
   }
 }
 
@@ -87,14 +143,15 @@ name:"popup",
 }
 .cart{
     position: fixed;
-    height:50%;
+    height:60%;
     bottom: 0px;
     width: 100%;
     background-color: #fff;
     border-radius: 10px;
+    overflow: scroll;
 }
 .image{
-    margin-bottom: 30px;
+    margin-bottom: 10px;
 }
 .image img{
     width: 80px;
@@ -117,15 +174,67 @@ name:"popup",
     left: 20px;
     margin-bottom: 10px;
 }
-.color div{
+.sizech{
     display: flex;
-    flex:1;
 }
-.sizes{
-    position: relative;
+.colorlabel{
+    border: solid 1px;
+    text-align: center;
     font-size: 15px;
+    margin:10px 80px;
+    padding: 10px 0;
+    border-radius: 5px;
+}
+.one{
+    margin-bottom: 10px;
+}
+.active{
+    color:var(--color-high-text);
+    border: solid 1px var(--color-high-text);
+}
+.sizelabel{
+    flex: 1;
+    border: solid 1px;
+    text-align: center;
+    margin: 0 15px;
+    font-size: 15px;
+    border-radius: 5px;
+    padding: 5px 0;
+}
+.button{
+    position: fixed;
+    left:0;
+    height: 50px;
+    width: 100%;
+    bottom: 0px;
+    background-color:var(--color-high-text) ;
+    color: white;
+    border-radius: 20px;
+}
+.empty{
+    height: 50px;
+    text-align: center;
+}
+.two{
+    display: flex;
+    margin:20px 0;
+    font-size: 15px;
+}
+.num{
+    position: relative;
     color: var(--color-high-text);
     left: 20px;
     margin-bottom: 10px;
+}
+.change{
+    margin-left:260px;
+}
+.change button{
+    width:20px;
+    background-color:rgba(0,0,0,0);
+    border-radius: 5px;
+}
+.change input{
+    width:30px
 }
 </style>
