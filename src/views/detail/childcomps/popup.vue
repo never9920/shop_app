@@ -30,7 +30,7 @@
               </div>
           </div>
           <div class="empty">空白</div>
-          <button class="button" @click="submit">提交</button>
+          <button class="button" @click="submit">{{mess}}</button>
       </div>
   </div>
 </template>
@@ -64,6 +64,9 @@ name:"popup",
     },
     goods:{
         type:Object
+    },
+    mess:{
+        type:String
     }
   },
 
@@ -79,6 +82,9 @@ name:"popup",
       popclose(){
           //console.log(this.paraminfo)
           this.$emit('popclose')
+          this.current=-1;
+          this.currentindex=-1;
+          this.num = 1
       },
       change(i){
           if(this.current === i){
@@ -103,6 +109,9 @@ name:"popup",
               this.arcv.num = this.num
               //console.log(this.arcv)
               this.$emit('tocart',this.arcv)
+              this.current=-1;
+              this.currentindex=-1
+              this.num = 1
           }
       },
       changetype(){

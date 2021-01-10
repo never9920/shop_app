@@ -12,12 +12,20 @@
     <detailshop :shop="shop"></detailshop>
     <detailgoods :detailinfo="detailinfo" @imageload="imageload"></detailgoods>
     <detailparam :paraminfo="paraminfo" ref="param"></detailparam>
-    <detailcomment :commentinfo="commentinfo" ref="comment"></detailcomment>
+    <detailcomment :commentinfo="commentinfo" ref="comment" @showimg="showimg"></detailcomment>
     <detailrecommend :recommendlist="recommendlist" ref="recommend"></detailrecommend>
     </scroll>
-    <detailbottombar @addtocart="showpop"></detailbottombar>
+    <detailbottombar @addtocart="showpop" @add="add"></detailbottombar>
     <backtop @click.native="backtop" v-show="isshow"></backtop>
-    <popup v-show="pop" @popclose="popclose" :paraminfo="paraminfo" :topimg="topimg" :goods="goods" @tocart="tocart"></popup>
+    <popup 
+    v-show="pop" 
+    @popclose="popclose" 
+    :paraminfo="paraminfo" 
+    :topimg="topimg" 
+    :goods="goods"
+    @tocart="tocart" 
+    :mess="mess"></popup>
+    <popupimg v-show="popimg" :image="image"  @popclose="close"></popupimg>
     <!--:为后者是父组件信息，前者是子组件的接受，后者传送给前者，一般用于父组件传给子组件；@前者为子组件发出的信息，后者为父组件的方法-->
   </div>
 </template>
@@ -33,6 +41,7 @@ import detailcomment from "./childcomps/detailcomment"
 import detailrecommend from "./childcomps/detailrecommend"
 import detailbottombar from "./childcomps/detailbottombar"
 import popup from './childcomps/popup'
+import popupimg from './childcomps/popupimg'
 //import backtop from "components/content/backtop/backtop"
 
 import scroll from "components/common/better-scroll/scroll"
@@ -61,7 +70,10 @@ name:"detail",
         currentindex:0,
         mess:'',
         show:false,
-        pop:false
+        pop:false,
+        mess:'加入购物车',
+        popimg:false,
+        image:''
     };
   },
   mixins:[imglistern,backtopp],
@@ -124,7 +136,8 @@ name:"detail",
       detailrecommend,
       detailbottombar,
       scroll,
-      popup
+      popup,
+      popupimg
   },
 
   computed: {},
@@ -180,34 +193,33 @@ name:"detail",
       product.iid = this.iid;
       product.num = arcv.num;
       product.color = arcv.color;
-      product.size = arcv.sizes
-      //this.$store.cartist.push(product)
-      //this.$store.commit('addcart',product)
-      /*this.$store.dispatch('addcart',product).then(res=>{
-        console.log(res)
-        //成功之后再显示
-      })*/
-      //console.log(product)
+      product.size = arcv.sizes;
       this.addcart(product).then(res=>{
-        /*this.show = true;
-        this.mess = res;
-        setTimeout(()=>{
-          this.show = false;
-          this.mess = "";
-        },1500)*/
-        //console.log(res)
         this.$toast.show(res,1500)
         this.pop= false
-        this.$router.push('/cart')
+        if(this.mess === '购买'){
+          this.$router.push('/cart')
+        }
       })
-      //console.log(arcv)
     },
     popclose(){
       this.pop = false
     },
     showpop(){
+      this.mess = '加入购物车'
       this.pop = true
-    }
+    },
+    add(){
+      this.mess = '购买'
+      this.pop = true
+    },
+    close(){
+      this.popimg = false
+    },
+    showimg(item){
+      this.image = item;
+      this.popimg = true
+    },
   },
   mounted(){
   },

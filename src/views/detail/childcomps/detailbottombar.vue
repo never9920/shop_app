@@ -16,7 +16,7 @@
       </div>
       <div class="bitem bright">
           <div class="cart" @click="addtocart">加入购物车</div>
-          <div class="buy" @click="addtocart">购买</div>
+          <div class="buy" @click="add">购买</div>
       </div>
   </div>
 </template>
@@ -36,6 +36,9 @@ name:"detailbottombar",
   methods: {
       addtocart(){
           this.$emit('addtocart')
+      },
+      add(){
+          this.$emit('add')
       }
   }
 }

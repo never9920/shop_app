@@ -65,6 +65,8 @@ name:"cartbuttom",
     calc(){
       if(!this.$store.getters.cartlist.some(item=>item.checked)){
         this.$toast.show('请选择购买的商品',1500)
+      }else{
+        this.$router.push('./login')
       }
     }
   }

@@ -1,6 +1,9 @@
 import {
     ADD_COUNTER,
-    ADD_CART
+    ADD_CART,
+    DEL_CART,
+    DECREASE,
+    INCREASE
 } from './mutation-types'
 
 export default {
@@ -30,7 +33,7 @@ export default {
         }*/
         return new Promise((resolve, reject) => {
             let product = context.state.cartlist.find(function(item) {
-                return item.iid === payload.iid
+                return item.iid === payload.iid && item.size === payload.size && item.color === payload.color
             })
             if (product) {
                 product.num = payload.num
@@ -44,5 +47,18 @@ export default {
             }
         })
 
-    }
+    },
+    delcart(context, payload) {
+        return new Promise((resolve, reject) => {
+            context.commit(DEL_CART, payload)
+            resolve('已移除该商品')
+        })
+    },
+    increase(context, payload) {
+        context.commit(INCREASE, payload)
+    },
+    decrease(context, payload) {
+        context.commit(DECREASE, payload)
+    },
+
 }

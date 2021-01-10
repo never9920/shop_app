@@ -1,26 +1,33 @@
 <template>
+<div>
+  <slip @makesure="makesure">
   <div id="citem">
       <div class="iselector">
           <checkbutton :ischeck="product.checked" @click.native="checkbtn"></checkbutton>
       </div>
-      <div class="iimg">
+      <div class="iimg" @click="todetail">
           <img :src="product.image" alt="商品">
       </div>
       <div class="iinfo">
           <div class="ititle">{{product.title}}</div>
-          <div class="idesc">商品描述：{{product.desc}}</div>
+          <div class="idesc">尺寸：{{product.size}}</div>
+          <div class="idesc">颜色：{{product.color}}</div>
           <div class="ibottom">
               <div class="iprice left">¥{{product.price}}</div>
-              <button class="jia right" @click="increase">+</button>
+              <button class="jia right" @click="inc">+</button>
               <div class="icount right">{{product.count}}</div>
-              <button class="jian right" @click="decrease">-</button>
+              <button class="jian right" @click="dec">-</button>
           </div>
       </div>
+  </div>
+  </slip>
   </div>
 </template>
 
 <script>
 import checkbutton from './checkbutton'
+import {mapActions} from 'vuex'
+import slip from '../../../components/common/slip/slip'
 export default {
 name:"cartitem",
 props:{
@@ -35,22 +42,32 @@ props:{
   },
 
   components: {
-      checkbutton
+      checkbutton,
+      slip
   },
 
   computed: {},
 
   methods: {
-      increase(){
-          this.product.count++
+      ...mapActions(['increase','decrease']),
+      inc(){
+          this.increase(this.product)
       },
-      decrease(){
+      dec(){
           if(this.product.count!==1){
-              this.product.count--
+              this.decrease(this.product)
+          }else if(this.product.count === 1){
+              this.$bus.$emit('makesure',this.product)
           }
       },
       checkbtn(){
           this.product.checked =!this.product.checked;
+      },
+      todetail(){
+          this.$router.push('./detail/' + this.product.iid)
+      },
+      makesure(){
+          this.$bus.$emit('makesure',this.product)
       }
   }
 }
@@ -58,7 +75,7 @@ props:{
 </script>
 <style scoped>
 #citem{
-    width:100%;
+    width:375px;
     display: flex;
     font-size: 0;
     padding: 5px;
@@ -74,6 +91,9 @@ props:{
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+}
+.idesc{  
+    margin-top: 5px!important
 }
 .iimg{
     padding: 5px;

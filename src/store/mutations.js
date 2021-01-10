@@ -1,6 +1,9 @@
 import {
     ADD_COUNTER,
-    ADD_CART
+    ADD_CART,
+    DEL_CART,
+    DECREASE,
+    INCREASE
 } from './mutation-types'
 
 
@@ -13,5 +16,26 @@ export default {
     [ADD_CART](state, payload) {
         payload.checked = true
         state.cartlist.push(payload)
+    },
+    [DEL_CART](state, payload) {
+        state.cartlist.map((item, index) => {
+            if (item.iid === payload.iid && item.size === payload.size && item.color === payload.color) {
+                state.cartlist.splice(index, 1)
+            }
+        })
+    },
+    [DECREASE](state, payload) {
+        state.cartlist.map((item, index) => {
+            if (item.iid === payload.iid && item.size === payload.size && item.color === payload.color) {
+                item.count--
+            }
+        })
+    },
+    [INCREASE](state, payload) {
+        state.cartlist.map((item, index) => {
+            if (item.iid === payload.iid && item.size === payload.size && item.color === payload.color) {
+                item.count++
+            }
+        })
     }
 }

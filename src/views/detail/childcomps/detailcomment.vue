@@ -19,7 +19,7 @@
                   <span>{{commentinfo.style}}</span>
               </div>
               <div class="iimgs">
-                  <img v-lazy="item" v-for="(item,index) in commentinfo.images" :key="index">
+                  <img v-lazy="item" v-for="(item,index) in commentinfo.images" :key="index" @click="showimg(item)">
               </div>
           </div>
           <div class="ex">
@@ -49,7 +49,8 @@ filters:{
     };
   },
 
-  components: {},
+  components: {
+  },
 
   computed: {},
 
@@ -57,6 +58,9 @@ filters:{
       /*imgload(){
           this.$emit("imageload")
       }*/
+      showimg(item){
+          this.$emit('showimg',item)
+      },
   }
 }
 

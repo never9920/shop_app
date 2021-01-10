@@ -8,6 +8,7 @@
       <cartlist></cartlist> 
     </scroll>
     <cartbuttom></cartbuttom>
+    <popupdel v-show="delsure" @popclose="popclose" @sure="sure"></popupdel>
   </div>
 </template>
 
@@ -15,17 +16,28 @@
 import navbar from 'components/common/navbar/navbar'
 import cartlist from './childcomps/cartlist'
 import cartbuttom from './childcomps/cartbuttom'
+import popupdel from './childcomps/popupdel'
 
-import {mapGetters} from 'vuex'
+import {mapGetters,mapActions} from 'vuex'
 
 import scroll from 'components/common/better-scroll/scroll.vue'
 export default {
 name:"cart",
+data(){
+  return{
+    delsure:false,
+    delitem:{}
+  }
+},
 components:{
   navbar,
   cartlist,
   scroll,
-  cartbuttom
+  cartbuttom,
+  popupdel,
+},
+mounted(){
+  this.$bus.$on('makesure',this.makesure)
 },
 computed:{
   ...mapGetters(['cartlength'])
@@ -36,6 +48,22 @@ computed:{
 activated(){
   this.$refs.scroll.refresh()
 },
+methods:{
+  ...mapActions(['delcart']),
+  popclose(){
+    this.delsure = false
+  },
+  makesure(item){
+    this.delsure = true
+    this.delitem = item
+  },
+  sure(){
+    this.delcart(this.delitem).then(res=>{
+      this.$toast.show(res,1500)
+      this.delsure = false
+    })
+  }
+}
 }
 
 </script>
