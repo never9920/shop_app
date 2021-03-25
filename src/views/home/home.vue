@@ -111,12 +111,8 @@ mounted(){
      /*console.log('------')*/
      /*this.$refs.scroll && this.$refs.scroll.refresh()*/
      //refresh()
-
    //所有组件都有一个属性$el：用于获取组件中的元素
    /*this.$refs.tab.$el.offsetTop没有完全加载图片，高度不对，过低*/
-
-
-
 },
   methods:{
     tabclick(index){
